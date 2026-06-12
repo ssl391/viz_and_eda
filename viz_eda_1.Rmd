@@ -1,6 +1,6 @@
 ---
 title: "Viz and EDA"
-subtitle 
+subtitle: viz 1
 output: github_document
 ---
 
@@ -196,5 +196,22 @@ Ridge plots the most popular
 weather_df %>% 
   ggplot(aes(x = tmin, y=name)) +
   geom_density_ridges()
+```
+
+save a scatterplot
+```{r}
+weather_plot = 
+  weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = 0.5)
+
+ggsave("weather_plot.pdf")
+```
+
+
+what about embedding
+
+```{r}
+weather_plot
 ```
 
