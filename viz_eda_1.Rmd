@@ -1,0 +1,200 @@
+---
+title: "Viz and EDA"
+subtitle 
+output: github_document
+---
+
+```{r setup}
+library(tidyverse)
+library(ggridges)
+library(p8105.datasets)
+library(hexbin)
+data("weather_df")
+```
+
+
+##scatterplots
+
+First scatterplot
+```{r}
+ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+  geom_point()
+```
+
+New approach same plot
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point()
+```
+
+Save and edit a plot object
+```{r}
+weather_plot = 
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) 
+
+weather_plot + geom_point()
+```
+
+##advanced scatterplot
+
+Start w the same one and mae it fancy
+this makes 3 different geom smooth lines 
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE)
+
+```
+
+AES placement?
+color here only applies to teh scatterplot 
+this makes 1 line
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name)) + 
+  geom_smooth()
+
+```
+
+Facet  now separates out by name 
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE) + 
+  facet_grid(. ~ name)
+
+```
+
+switch up rows and columns
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE) + 
+  facet_grid(name ~.)
+```
+
+adjust alpha level 
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = 0.2, size = 2) + 
+  geom_smooth(se = FALSE) + 
+  facet_grid(name ~.)
+```
+
+New plot
+```{r}
+weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name )) + 
+  geom_point(alpha = 0.2) + 
+  geom_smooth(se = FALSE) + 
+  facet_grid(. ~name)
+```
+
+
+## small notes
+
+how many geoms have to exist? 
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_smooth(se = FALSE)
+
+```
+
+
+neat geom
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_hex()
+```
+
+
+neat geom
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_density2d() +
+  geom_point(alpha = 0.3)
+```
+
+
+## Univariate plots
+
+Histogram
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin)) + 
+  geom_histogram()
+```
+
+add color
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, color = name)) + 
+  geom_histogram()
+```
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, color = name)) + 
+  geom_histogram(position = "dodge")
+```
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) + 
+  geom_histogram(position = "dodge")
+```
+
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) + 
+  geom_histogram(position = "dodge") +
+  facet_grid(. ~name)
+```
+
+New geom!
+w
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_density(alpha = 0.3, adjust = 0.5)
+
+```
+
+Boxplots
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x= name, y = tmin)) +
+  geom_boxplot()
+```
+
+trendy plots
+```{r}
+weather_df %>% 
+  ggplot(aes(x = name, y = tmin, fill = name)) + 
+  geom_violin(alpha = 0.5) +
+  stat_summary()
+```
+
+
+Ridge plots the most popular
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y=name)) +
+  geom_density_ridges()
+```
+
